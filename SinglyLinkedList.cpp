@@ -22,7 +22,7 @@ void InitList(ptrNode *head)
 int EmptyList(ptrNode head)
 /* return 1: empty list; return 0: not empty*/
 {
-	if (head->next = NULL)
+	if (head->next == NULL)
 		return 1;
 	else
 		return 0;
@@ -83,13 +83,15 @@ ptrNode LocatElem(ptrNode head, int Elem)
 int LocatPos(ptrNode head, int Elem)
 {
 	int i = 0;
-	ptrNode p = head->next;
+	ptrNode p;
 
 	if (EmptyList(head))
 	{
 		printf("\n¿ÕÁ´±í\n");
 		return -1;
 	}
+
+	p = head->next;
 
 	while (p)
 	{
@@ -216,13 +218,14 @@ int main()
 		InsertNode(L,i,i);
 
 	ShowList(L);
-	
-	printf("\n%2d\n", ListLength(L));
 
-	
-	printf("\n%2d\n",LocatPos(L, 5));
+	printf("\n%d\n", ListLength(L));
 
-	//DeleteNode(L,1);
+	printf("\n%d\n",LocatPos(L,5));
+		
+	printf("\n%d\n", (GetElem(L,9))->data);
+	
+	DeleteNode(L,1); 
 
 	ShowList(L);
 
