@@ -28,11 +28,11 @@ int PopStack(seqStack *s, ElemType *p)
 	}
 	else
 	{
-		*p = s->stack[s->top];
 		s->top--;
+		*p = s->stack[s->top];
+		
 		return 1;		
 	}
-
 }
 
 int PushStack(seqStack *s, ElemType elem)
@@ -48,7 +48,6 @@ int PushStack(seqStack *s, ElemType elem)
 		s->top++;
 		return 1;
 	}
-
 }
 
 void ShowStack(seqStack *s)
@@ -66,12 +65,14 @@ int main()
 	for (int i = 0; i < 10; i++)
 		PushStack(&S,i);
 	ShowStack(&S);
-/*	
-	ElemType *t;
-	PopStack(&S, t);
-	printf("%d ", *t);
-*/
-	
+
+	ElemType t;
+
+	for (int j = 0; j < 10; j++)
+	{
+		PopStack(&S, &t);
+		printf("%d ", t);
+	}
+		
     return 0;
 }
-
