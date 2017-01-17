@@ -62,41 +62,42 @@ int EnQueue(NodeQue *NQ, BiTree T)
 	}		
 }
 
-int DeQueue(NodeQue *NQ, char *p)
+char DeQueue(NodeQue *NQ)
 /*出队*/
 {
+	char e;
 	if (EmptyQueue(NQ))
 		return 0;
 	else
 	{
-		*p = NQ->Node[NQ->front];
+		e = NQ->Node[NQ->front];
 		NQ->front++;
-		return 1;
+		return e;
 	}
 }
 
-void InitBiTree(BiTree T)
+void InitBiTree(BiTree *T)
 /*初始化二叉树*/
 {
-	T->lchild = T->rchild = NULL;
+	*T = NULL;
 }
 
-void CreatBiTree(BiTree T)
+void CreatBiTree(BiTree *T)
 /*创建二叉树*/
 {
 	char ch;
-	scanf("%c", &ch);
+	scanf_s("%c", &ch, sizeof(ch));
 
 	if (ch == '^')
-		T = NULL;
+		*T = NULL;
 	else
 	{
-		T = (BiTree)malloc(sizeof(TreeNode));
-		if (!T)
+		*T = (BiTree)malloc(sizeof(TreeNode));
+		if (!(*T))
 			exit(-1);
-		T->data = ch;
-		CreatBiTree(T->lchild);
-		CreatBiTree(T->rchild);
+		(*T)->data = ch;
+		CreatBiTree(&((*T)->lchild));
+		CreatBiTree(&((*T)->rchild));
 	}
 }
 
@@ -149,13 +150,48 @@ void PostOrderTraversal(BiTree T)
 		printf("%c ", T->data);
 	}
 }
-
+/*
 void LevelOrderTraversal(BiTree T)
-/*层序遍历*/
 {
 	NodeQue NQ;
+	BiTree T1;
 	InitQueue(&NQ);
-	char *p;
+
+	
+		EnQueue(&NQ, T);
+
+		while (!EmptyQueue(&NQ))
+		{
+			T1 = Point(T, DeQueue(&NQ));
+			printf("%c ",T1->data);
+			if (T1->lchild)
+			{
+				EnQueue(&NQ, T1->lchild);
+			}
+				
+			if (T1->rchild)
+			{
+				EnQueue(&NQ, T1->rchild);
+			}				
+		}
+	
+}
+*/
+BiTree Point(BiTree T, char e)
+/*查找树中的元素e，返回其指针*/
+{
+	if (T)
+	{
+		if (T->data == 'e')
+			return T;
+		Point(T->lchild, 'e');
+		Point(T->rchild, 'e');
+	}
+/*
+	return NULL;
+	NodeQue NQ;
+	InitQueue(&NQ);
+	char p;
 
 	if (T)
 	{
@@ -163,14 +199,21 @@ void LevelOrderTraversal(BiTree T)
 
 		while (!EmptyQueue(&NQ))
 		{
-			DeQueue(&NQ, p);
-			printf("%c ", *p);
+			p = DeQueue(&NQ);
+			if (p == e)
+			{
+				printf("%c ", p);
+				return T;
+			}
+
 			if (T->lchild)
 				EnQueue(&NQ, T->lchild);
 			if (T->rchild)
 				EnQueue(&NQ, T->rchild);
 		}
 	}
+	return NULL;
+	*/
 }
 
 int InsertLeftChild(BiTree p, BiTree c)
@@ -197,35 +240,6 @@ int InsertRightChild(BiTree p, BiTree c)
 	return 0;
 }
 
-BiTree Point(BiTree T, char e)
-/*查找树中的元素e，返回其指针*/
-{
-	NodeQue NQ;
-	InitQueue(&NQ);
-	char *p;
-
-	if (T)
-	{
-		EnQueue(&NQ, T);
-
-		while (!EmptyQueue(&NQ))
-		{
-			DeQueue(&NQ, p);
-			if (*p == e)
-			{
-				printf("%c ", *p);
-				return T;
-			}
-
-			if (T->lchild)
-				EnQueue(&NQ, T->lchild);
-			if (T->rchild)
-				EnQueue(&NQ, T->rchild);
-		}
-	}
-	return NULL;
-}
-
 char LeftChild(BiTree T, char e)
 /*查找节点元素e的左孩子节点值*/
 {
@@ -234,8 +248,7 @@ char LeftChild(BiTree T, char e)
 
 	if (p && p->lchild)
 		return p->lchild->data;
-	return '^';
-		
+	return '^';		
 }
 
 char RightChild(BiTree T, char e)
@@ -273,5 +286,24 @@ int DeleteRightTree(BiTree p)
 
 int main()
 {
+	BiTree  T;
+	InitBiTree(&T);
+	CreatBiTree(&T);
+
+	printf("\n前序遍历\n");
+	PreOrderTraversal(T);
+
+	printf("\n中序遍历\n");
+	InOrderTraversal(T);
+
+	printf("\n后序遍历\n");
+	PostOrderTraversal(T);
+
+//	printf("\n层序遍历\n");
+//	LevelOrderTraversal(T);
+
+	printf("%c\n", LeftChild(Point(T,'b'),'b'));
+	
+	
     return 0;
 }
